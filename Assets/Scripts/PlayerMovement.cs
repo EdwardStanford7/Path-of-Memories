@@ -1,45 +1,44 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private bool canDash = true;
+    private int dashTime = 0;
+    private bool dashInput = false;
+    private int dashSpeed = 20;
+
+    private bool grounded = false;
+
     private float coyoteTime = .15f;
     private float coyoteTimeCounter;
 
     private float jumpBufferTime = .1f;
     private float jumpBufferCounter;
+    private bool jumping = false;
 
     private bool isFacingRight = true;
 
-    private Rigidbody2D rb;
-    private Animator mouseAnimator;
+    private bool movingLeft = true;
+    private bool movingRight = true;
 
-    //[SerializeField] public GameController controller;
+    private Rigidbody2D rb;
+
     [SerializeField] Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
-    void Start()
+    private void Start()
     {
-        //GetComponent<Transform>().position = controller.spawnPoint;
         rb = GetComponent<Rigidbody2D>();
-        mouseAnimator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
-        if (IsGrounded())
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                mouseAnimator.SetTrigger("getKnock");
-            }
-        }
-    }
-    void FixedUpdate()
-    {
-        bool movingLeft = false;
-        bool movingRight = false;
+        movingLeft = false;
+        movingRight = false;
+        dashInput = false;
+        jumping = false;
+
+        grounded = IsGrounded();
 
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
@@ -48,6 +47,57 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             movingRight = true;
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            dashInput = true;
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0f)
+        {
+            jumping = true;
+
+            coyoteTimeCounter = 0f;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (dashTime > 5)
+        {
+            dashTime--;
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+
+            return;
+        }
+        else if (dashTime > 0)
+        {
+            dashTime--;
+            rb.velocity = new Vector2(rb.velocity.x / dashSpeed, 0);
+
+            return;
+        }
+
+        if ((dashTime == 0) && grounded)
+        {
+            canDash = true;
+        }
+
+        if (dashInput && canDash)
+        {
+            canDash = false;
+            dashInput = false;
+            TriggerDash();
         }
 
         if (movingLeft || movingRight)
@@ -67,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (!IsGrounded())
+            if (!grounded)
             {
                 rb.velocity = new Vector2((float)(rb.velocity.x / 1.01), rb.velocity.y);
             }
@@ -77,22 +127,13 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (IsGrounded())
+        if (grounded)
         {
             coyoteTimeCounter = coyoteTime;
         }
         else
         {
             coyoteTimeCounter -= Time.deltaTime;
-        }
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            jumpBufferCounter = jumpBufferTime;
-        }
-        else
-        {
-            jumpBufferCounter -= Time.deltaTime;
         }
 
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
@@ -102,16 +143,12 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = 0;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0f)
+        if (jumping)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-            mouseAnimator.SetTrigger("isJumping");
-
-            coyoteTimeCounter = 0f;
         }
 
         Flip();
-        mouseAnimator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
     }
 
     public bool IsGrounded()
@@ -124,23 +161,21 @@ public class PlayerMovement : MonoBehaviour
         if ((isFacingRight && rb.velocity.x < 0f) || (!isFacingRight && rb.velocity.x > 0f))
         {
             isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            transform.localScale *= -1f;
         }
     }
 
-    public void Die()
+    private void TriggerDash()
     {
-        // Play death animation probably
-        //transform.position = controller.spawnPoint;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("End"))
+        if (isFacingRight)
         {
-            SceneManager.LoadScene(3);
+            rb.velocity = new Vector2(dashSpeed, 0);
         }
+        else
+        {
+            rb.velocity = new Vector2(-dashSpeed, 0);
+        }
+
+        dashTime = 15;
     }
 }
