@@ -18,9 +18,10 @@ public class PlayerMovement : MonoBehaviour
     private bool movingRight = true;
 
     // Climb movement variables.
-    private bool climbInputPressed = false;
+    private bool climbing = false;
     private bool movingUp = false;
     private bool movingDown = false;
+    private int duringJump = 0;
 
     // Jump movement variables.
     private bool grounded = false;
@@ -86,6 +87,11 @@ public class PlayerMovement : MonoBehaviour
             dashInputReleased = true;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space) && climbing)
+        {
+            duringJump = 3;
+        }
+
         if (Input.GetKey(KeyCode.Space))
         {
             jumpBufferCounter = jumpBufferTime;
@@ -110,25 +116,30 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftControl) && canClimb && TouchingWall())
         {
-            climbInputPressed = true;
+            climbing = true;
             rb.gravityScale = 0;
+        }
+
+        if (!TouchingWall())
+        {
+            climbing = false;
+            rb.gravityScale = gravityScale;
         }
 
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
-            climbInputPressed = false;
+            climbing = false;
             movingUp = false;
             movingDown = false;
             rb.gravityScale = gravityScale;
-            rb.velocity = Vector2.zero;
         }
 
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && climbInputPressed)
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && climbing)
         {
             movingUp = true;
         }
 
-        if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && climbInputPressed)
+        if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && climbing)
         {
             movingDown = true;
         }
@@ -173,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (climbInputPressed)
+        if (climbing && duringJump == 0)
         {
             if (movingUp)
             {
@@ -186,6 +197,15 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 rb.velocity = new Vector2(0, 0);
+            }
+        }
+
+        if (duringJump > 0)
+        {
+            duringJump--;
+            if (TouchingWall())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 25f);
             }
         }
 
@@ -219,7 +239,7 @@ public class PlayerMovement : MonoBehaviour
                 canDash = true;
             }
 
-            if (!climbInputPressed)
+            if (!climbing)
             {
                 rb.gravityScale = gravityScale;
             }
@@ -262,7 +282,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool TouchingWall()
     {
-        return (Physics2D.OverlapCircle(wallCheckLeft.position, 0.02f, groundLayer) || Physics2D.OverlapCircle(wallCheckRight.position, 0.02f, groundLayer));
+        return Physics2D.OverlapCircle(wallCheckLeft.position, 0.02f, groundLayer) || Physics2D.OverlapCircle(wallCheckRight.position, 0.02f, groundLayer);
     }
 
     private void Flip()
