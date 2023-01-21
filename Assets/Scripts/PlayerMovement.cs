@@ -17,6 +17,10 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferCounter;
     private bool jumping = false;
 
+    private bool doubleJumpActive = true;
+    private bool canDoubleJump = false;
+    private bool doubleJumping = false;
+
     private bool isFacingRight = true;
 
     private bool movingLeft = true;
@@ -40,6 +44,11 @@ public class PlayerMovement : MonoBehaviour
         jumping = false;
 
         grounded = IsGrounded();
+
+        if (grounded && doubleJumpActive)
+        {
+            canDoubleJump = true;
+        }
 
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
@@ -74,6 +83,12 @@ public class PlayerMovement : MonoBehaviour
             jumping = true;
 
             coyoteTimeCounter = 0f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && !IsGrounded() && canDoubleJump)
+        {
+            doubleJumping = true;
+            canDoubleJump = false;
         }
     }
 
@@ -150,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 20f);
+            rb.velocity = new Vector2(rb.velocity.x, 15f);
 
             jumpBufferCounter = 0;
         }
@@ -158,6 +173,12 @@ public class PlayerMovement : MonoBehaviour
         if (jumping)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        }
+
+        if (doubleJumping)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 25f);
+            doubleJumping = false;
         }
 
         Flip();
