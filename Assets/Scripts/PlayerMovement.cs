@@ -10,9 +10,10 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferCounter;
 
     private bool isFacingRight = true;
+    private bool canDoubleJump;
+
 
     private Rigidbody2D rb;
-    private Animator mouseAnimator;
 
     //[SerializeField] public GameController controller;
     [SerializeField] Transform groundCheck;
@@ -22,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
     {
         //GetComponent<Transform>().position = controller.spawnPoint;
         rb = GetComponent<Rigidbody2D>();
-        mouseAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -30,12 +30,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (IsGrounded())
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                mouseAnimator.SetTrigger("getKnock");
-            }
+            canDoubleJump = true;
+        }
+
+        //double jump attempting area
+        if (Input.GetKeyDown(KeyCode.Space) && !IsGrounded() && canDoubleJump)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 20f);
+            canDoubleJump = false;
         }
     }
+
     void FixedUpdate()
     {
         bool movingLeft = false;
@@ -77,15 +82,20 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        //coyote time counts down from .15 when I am in the air, and resets on the ground until I jump again
+        // in air, coyoteTimeCounter < .15
         if (IsGrounded())
         {
             coyoteTimeCounter = coyoteTime;
+
         }
         else
         {
             coyoteTimeCounter -= Time.deltaTime;
         }
 
+        //Every frame I am not pressing or holding space, the jump buffer counter decreases from .1, and resets and stays when I press and hold space
+        //in air, jumpBufferCounter 
         if (Input.GetKey(KeyCode.Space))
         {
             jumpBufferCounter = jumpBufferTime;
@@ -95,23 +105,20 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
+
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, 20f);
-
             jumpBufferCounter = 0;
         }
 
         if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-            mouseAnimator.SetTrigger("isJumping");
-
             coyoteTimeCounter = 0f;
         }
 
         Flip();
-        mouseAnimator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
     }
 
     public bool IsGrounded()
@@ -127,20 +134,6 @@ public class PlayerMovement : MonoBehaviour
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
-        }
-    }
-
-    public void Die()
-    {
-        // Play death animation probably
-        //transform.position = controller.spawnPoint;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("End"))
-        {
-            SceneManager.LoadScene(3);
         }
     }
 }
