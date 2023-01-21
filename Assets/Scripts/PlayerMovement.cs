@@ -283,22 +283,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (jumping)
         {
-<<<<<<< Updated upstream
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpDecelerationFactor);
-=======
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             playerAnimator.SetTrigger("isJumping");
->>>>>>> Stashed changes
         }
 
         if (doubleJumping)
         {
-<<<<<<< Updated upstream
             rb.velocity = new Vector2(rb.velocity.x, doubleJumpSpeed);
-=======
-            rb.velocity = new Vector2(rb.velocity.x, 25f);
             playerAnimator.SetTrigger("isJumping");
->>>>>>> Stashed changes
             doubleJumping = false;
         }
 
