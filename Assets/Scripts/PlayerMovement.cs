@@ -55,6 +55,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int dashSpeed = 30;
     private bool dashInputReleased = true;
 
+    // Animation
+    private Animator playerAnimator;
+
     // Layer and collision check variables.
     [SerializeField] Transform groundCheck;
     [SerializeField] Transform wallCheckLeft;
@@ -65,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
+        playerAnimator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -116,6 +120,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0f)
         {
+            playerAnimator.SetTrigger("isJumping");
+
             jumping = true;
 
             coyoteTimeCounter = 0f;
@@ -278,15 +284,18 @@ public class PlayerMovement : MonoBehaviour
         if (jumping)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpDecelerationFactor);
+            playerAnimator.SetTrigger("isJumping");
         }
 
         if (doubleJumping)
         {
             rb.velocity = new Vector2(rb.velocity.x, doubleJumpSpeed);
+            playerAnimator.SetTrigger("isJumping");
             doubleJumping = false;
         }
 
         Flip();
+        playerAnimator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
     }
 
     public bool IsGrounded()
