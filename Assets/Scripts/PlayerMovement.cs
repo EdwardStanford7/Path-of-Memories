@@ -5,7 +5,8 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
     private int dashTime = 0;
     private bool dashInput = false;
-    private int dashSpeed = 20;
+    private int dashSpeed = 30;
+    private bool dashInputReleased = true;
 
     private bool grounded = false;
 
@@ -54,6 +55,11 @@ public class PlayerMovement : MonoBehaviour
             dashInput = true;
         }
 
+        if (!Input.GetKey(KeyCode.LeftShift))
+        {
+            dashInputReleased = true;
+        }
+
         if (Input.GetKey(KeyCode.Space))
         {
             jumpBufferCounter = jumpBufferTime;
@@ -73,6 +79,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (dashInput && canDash && dashInputReleased)
+        {
+            canDash = false;
+            dashInput = false;
+            TriggerDash();
+            dashInputReleased = false;
+        }
+
         if (dashTime > 5)
         {
             dashTime--;
@@ -88,16 +102,14 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if ((dashTime == 0) && grounded)
+        if (dashTime == 0)
         {
-            canDash = true;
-        }
+            if (grounded)
+            {
+                canDash = true;
+            }
 
-        if (dashInput && canDash)
-        {
-            canDash = false;
-            dashInput = false;
-            TriggerDash();
+            rb.gravityScale = 10f;
         }
 
         if (movingLeft || movingRight)
@@ -115,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
         }
-        else
+        else if (dashTime == 0)
         {
             if (!grounded)
             {
@@ -158,15 +170,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void Flip()
     {
-        if ((isFacingRight && rb.velocity.x < 0f) || (!isFacingRight && rb.velocity.x > 0f))
+        if ((isFacingRight && rb.velocity.x < -.1f) || (!isFacingRight && rb.velocity.x > .1f))
         {
             isFacingRight = !isFacingRight;
-            transform.localScale *= -1f;
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
     }
 
     private void TriggerDash()
     {
+        rb.gravityScale = 0f;
+
         if (isFacingRight)
         {
             rb.velocity = new Vector2(dashSpeed, 0);
@@ -176,6 +190,6 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(-dashSpeed, 0);
         }
 
-        dashTime = 15;
+        dashTime = 10;
     }
 }
