@@ -2,7 +2,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // Ability activation booleans.
+    private bool canClimb = true;
+    private bool doubleJumpActive = true;
     private bool canDash = true;
+
+    // Other needed movement variables.
     private int dashTime = 0;
     private bool dashInput = false;
     private int dashSpeed = 30;
@@ -17,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferCounter;
     private bool jumping = false;
 
-    private bool doubleJumpActive = true;
     private bool canDoubleJump = false;
     private bool doubleJumping = false;
 
