@@ -211,6 +211,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (dashInput && canDash && dashInputReleased)
         {
+            climbing = false;
             canDash = false;
             dashInput = false;
             TriggerDash();
