@@ -45,7 +45,6 @@ public class DialogueManager : MonoBehaviour
             if (currCollider != null)
             {
                 Destroy(currCollider);
-                textPromptIndex++;
             }
         }
     }
@@ -58,6 +57,7 @@ public class DialogueManager : MonoBehaviour
             gameText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
+        textPromptIndex++;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
