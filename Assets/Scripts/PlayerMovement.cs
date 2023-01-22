@@ -348,18 +348,22 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log(canClimb);
             doubleJumpActive = false;
             canDash = false;
+            Destroy(collision.gameObject);
         }
         if (collision.gameObject.name.Equals("Jump"))
         {
             doubleJumpActive = true;
             canClimb = false;
             canDash = false;
+            Destroy(collision.gameObject);
         }
         if (collision.gameObject.name.Equals("Dash"))
         {
             canDash = true;
             canClimb = false;
             doubleJumpActive = false;
+            Destroy(collision.gameObject);
         }
+
     }
 }
