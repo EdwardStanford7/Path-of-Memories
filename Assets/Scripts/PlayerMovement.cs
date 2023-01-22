@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     // Ability activation booleans.
-    private bool canClimb = true; // Climb is holding down left control
-    private bool doubleJumpActive = true;
-    private bool canDash = true; // dash is left shift
+    private bool canClimb = false; // Climb is holding down left control
+    private bool doubleJumpActive = false;
+    private bool canDash = false; // dash is left shift
 
     // Regular movement variables.
     private Rigidbody2D rb;
@@ -366,5 +366,4 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
-
 }
