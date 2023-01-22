@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7490342147872217047}
   - component: {fileID: 7490342147872217046}
   - component: {fileID: 7490342147872217049}
-  - component: {fileID: 7490342147872217048}
+  - component: {fileID: 2335245611725514868}
   m_Layer: 0
   m_Name: InstantCrumblePlatform
   m_TagString: Untagged
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7490342147872217048
+--- !u!114 &2335245611725514868
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7490342147872217051}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029b10d2d9651074baa0d50115380ff2, type: 3}
+  m_Script: {fileID: 11500000, guid: 85612c065f37f434fa2c543e919eddd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   respawnTime: 1
