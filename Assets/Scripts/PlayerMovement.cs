@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
     // Ability activation booleans.
     private bool canClimb = false; // Climb is holding down left control
     private bool doubleJumpActive = false;
-    private bool canDash = false; // dash is left shift
+    private bool dashActive = false;
 
     // Regular movement variables.
     private Rigidbody2D rb;
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     private bool dashInput = false;
     [SerializeField] private int dashSpeed = 50;
     private bool dashInputReleased = true;
+    private bool canDash = false;
 
     // Animation
     private Animator playerAnimator;
@@ -94,12 +96,12 @@ public class PlayerMovement : MonoBehaviour
             movingRight = true;
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
             dashInput = true;
         }
 
-        if (!Input.GetKey(KeyCode.LeftShift))
+        if (!Input.GetKeyUp(KeyCode.LeftShift))
         {
             dashInputReleased = true;
         }
@@ -254,7 +256,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (dashTime == 0)
         {
-            if (grounded)
+            if (grounded && dashActive)
             {
                 canDash = true;
             }
@@ -305,7 +307,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool TouchingWall()
     {
-        return Physics2D.OverlapCircle(wallCheckLeft.position, 0.02f, groundLayer) || Physics2D.OverlapCircle(wallCheckRight.position, 0.02f, groundLayer);
+        return Physics2D.OverlapCircle(wallCheckLeft.position, 0.2f, groundLayer) || Physics2D.OverlapCircle(wallCheckRight.position, 0.2f, groundLayer);
     }
 
     private void Flip()
@@ -345,25 +347,26 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.name.Equals("Climb"))
         {
             canClimb = true;
-            Debug.Log(canClimb);
             doubleJumpActive = false;
-            canDash = false;
-            Destroy(collision.gameObject);
+            dashActive = false;
         }
         if (collision.gameObject.name.Equals("Jump"))
         {
             doubleJumpActive = true;
             canClimb = false;
-            canDash = false;
-            Destroy(collision.gameObject);
+            dashActive = false;
         }
         if (collision.gameObject.name.Equals("Dash"))
         {
-            canDash = true;
+            dashActive = true;
             canClimb = false;
             doubleJumpActive = false;
-            Destroy(collision.gameObject);
         }
 
+        if (collision.gameObject.name.Equals("LoadNextLevel"))
+        {
+            // Maybe play some sort of animation here.
+            SceneManager.LoadScene("Level" + (int.Parse(SceneManager.GetActiveScene().name.Substring(5)) + 1).ToString());
+        }
     }
 }
