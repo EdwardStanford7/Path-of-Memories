@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Crumble : MonoBehaviour
@@ -26,12 +24,6 @@ public class Crumble : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     // Updates consistently 50 times per second.
     private void FixedUpdate()
     {
@@ -46,19 +38,19 @@ public class Crumble : MonoBehaviour
             // Check to respawn the platform every frame.
             respawnPlatform();
         }
-        
+
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (col.gameObject.name.Equals("Player"))
+        if (collision.gameObject.name.Equals("GroundCheck"))
         {
             Collided = true;
-            
+
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (frameCount >= killTime)
         {
@@ -69,7 +61,7 @@ public class Crumble : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         Collided = false;
         frameCount = 0;
