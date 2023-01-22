@@ -413,7 +413,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 0.990566, g: 0.4889568, b: 0.015574837, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -602,7 +602,6 @@ MonoBehaviour:
   dashDuration: 15
   dashStallTime: 5
   dashSpeed: 40
-  canDash: 0
   groundCheck: {fileID: 1409677475}
   wallCheckLeft: {fileID: 100991684}
   wallCheckRight: {fileID: 1264467684}
