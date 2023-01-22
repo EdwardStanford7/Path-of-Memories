@@ -11578,8 +11578,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 8
-  gravityScale: 5.5
-  jumpSpeed: 12
+  gravityScale: 5
+  jumpSpeed: 15
   airDecelerationFactor: 1.01
   groundDecelerationFactor: 1.5
   climbingSpeed: 5
