@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,42 +8,66 @@ public class DialogueManager : MonoBehaviour
 {
     [SerializeField] private float typingSpeed = 0.05f;
 
-    [SerializeField] private bool PlayerSpeakingFirst;
-
-    [SerializeField] private TextMeshProUGUI playerDialogueText;
+    [SerializeField] private TextMeshProUGUI gameText;
 
     [SerializeField] private string[] playerDialogueSentences;
 
-    [SerializeField] private GameObject playerSpeechBubble;
+    [SerializeField] private GameObject textBox;
+    [SerializeField] private GameObject theText;
 
-    [TextArea]
-    [SerializeField] private GameObject playerContinueButton;
 
-    private int playerIndex;
+    private int textPromptIndex;
     private bool isActive = false;
 
 
     public void Start()
     {
-        playerSpeechBubble.SetActive(true);
     }
 
     public void Update()
     {
-        if (playerSpeechBubble.activeSelf && !isActive)
+        if (textBox.activeSelf && !isActive)
         {
-            StartCoroutine(TypePlayerDialogue());
+            StartCoroutine(TypeGameDialogue());
             isActive = true;
+        }
+
+
+        if (Input.GetKey(KeyCode.Return))
+        {
+            textBox.SetActive(false);
+            theText.SetActive(false);
+            isActive = false;
         }
     }
 
-    private IEnumerator TypePlayerDialogue()
+    private IEnumerator TypeGameDialogue()
     {
-        foreach(char letter in playerDialogueSentences[playerIndex].ToCharArray())
+        foreach(char letter in playerDialogueSentences[textPromptIndex].ToCharArray())
         {
-            playerDialogueText.text += letter;
+            gameText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
-        playerContinueButton.SetActive(true);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Console.WriteLine(collision.gameObject.name);
+        if (collision.gameObject.name == "TextPrompt_1")
+        {
+            textBox.SetActive(true);
+            theText.SetActive(true);
+            textPromptIndex = 0;
+        }
+
+        if (collision.name == "TextPrompt_2")
+        {
+
+        }
+
+        if (collision.name == "TextPrompt_3")
+        {
+
+        }
     }
 }
