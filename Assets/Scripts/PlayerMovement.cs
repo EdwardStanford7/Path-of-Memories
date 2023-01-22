@@ -366,7 +366,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.name.Equals("LoadNextLevel"))
         {
             // Maybe play some sort of animation here.
-            SceneManager.LoadScene("Level2");
+            SceneManager.LoadScene("Level" + (int.Parse(SceneManager.GetActiveScene().name.Substring(5)) + 1).ToString());
         }
     }
 }
