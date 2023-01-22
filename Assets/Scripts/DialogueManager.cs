@@ -35,7 +35,6 @@ public class DialogueManager : MonoBehaviour
             isActive = true;
         }
 
-
         if (Input.GetKey(KeyCode.Return) && isActive == true)
         {
             textBox.SetActive(false);
@@ -45,7 +44,6 @@ public class DialogueManager : MonoBehaviour
             if (currCollider != null)
             {
                 Destroy(currCollider);
-                textPromptIndex++;
             }
         }
     }
@@ -58,12 +56,21 @@ public class DialogueManager : MonoBehaviour
             gameText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
+        textPromptIndex++;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name.Contains("TextPrompt_" + textPromptIndex))
         {
+            if (isActive && currCollider != null)
+            {
+                new WaitForSeconds(0.7f);
+                    Destroy(currCollider);
+                    textBox.SetActive(false);
+                    theText.SetActive(false);
+                    isActive = false;
+            }
             currCollider = collision;
             textBox.SetActive(true);
             theText.SetActive(true);
