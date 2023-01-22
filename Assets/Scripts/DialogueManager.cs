@@ -54,7 +54,13 @@ public class DialogueManager : MonoBehaviour
         foreach(char letter in playerDialogueSentences[textPromptIndex].ToCharArray())
         {
             gameText.text += letter;
-            yield return new WaitForSeconds(typingSpeed);
+            if (currCollider != null)
+            {
+                if (currCollider.gameObject.name.Contains("TextPrompt_" + textPromptIndex))
+                {
+                    yield return new WaitForSeconds(typingSpeed);
+                }
+            }
         }
         textPromptIndex++;
     }

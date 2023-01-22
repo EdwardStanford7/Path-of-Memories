@@ -715,7 +715,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085101095}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.6, y: -5.43, z: 0}
+  m_LocalPosition: {x: -7.6, y: -5.527, z: 0}
   m_LocalScale: {x: 0.125, y: 0.125, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1071,8 +1071,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -1.0499997, y: 1.8699999}
-  m_SizeDelta: {x: 4.9556, y: 3.2333}
+  m_AnchoredPosition: {x: 2.758, y: 2.04}
+  m_SizeDelta: {x: 4.7196, y: 3.2333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1165008898
 CanvasRenderer:
@@ -1165,7 +1165,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0.77399206, w: 1.8328552}
+  m_margin: {x: 0, y: 0, z: 1.1054349, w: 1.8328552}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1380,7 +1380,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.14039004, y: 0.3385867}
+  m_Offset: {x: -0.025642276, y: 0.3385867}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1391,7 +1391,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9834831, y: 2.0735686}
+  m_Size: {x: 0.65141845, y: 2.0735686}
   m_EdgeRadius: 0
 --- !u!114 &1413779305
 MonoBehaviour:
@@ -1409,7 +1409,7 @@ MonoBehaviour:
   gameText: {fileID: 1165008899}
   playerDialogueSentences:
   - 'I think I remember ... '
-  - Floating ... or  tripping
+  - Floating ... or  tripping?
   - It felt so good to escape reality. Even if only for a little while ...
   - But that escape took its toll on my body.
   - And so I ...
@@ -1620,7 +1620,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613338881}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.435865, y: -5.409979, z: -10}
+  m_LocalPosition: {x: -7.435865, y: -5.506979, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
