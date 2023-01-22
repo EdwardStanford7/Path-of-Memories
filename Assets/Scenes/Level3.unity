@@ -1450,7 +1450,6 @@ MonoBehaviour:
   dashDuration: 15
   dashStallTime: 5
   dashSpeed: 40
-  canDash: 0
   groundCheck: {fileID: 301134465}
   wallCheckLeft: {fileID: 208127464}
   wallCheckRight: {fileID: 996827893}
@@ -1972,7 +1971,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 2.1771402}
+  m_Offset: {x: 0.66426086, y: 3.8045654}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1983,7 +1982,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 5.3542824}
+  m_Size: {x: 2.3285217, y: 8.609135}
   m_EdgeRadius: 0
 --- !u!1 &1736417018
 GameObject:
@@ -2253,7 +2252,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 2.0071084}
+  m_Offset: {x: -3.0902634, y: 0.8585148}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2264,7 +2263,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 5.014218}
+  m_Size: {x: 7.1805267, y: 7.311405}
   m_EdgeRadius: 0
 --- !u!1 &1824735903
 GameObject:
