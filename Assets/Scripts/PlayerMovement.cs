@@ -86,10 +86,16 @@ public class PlayerMovement : MonoBehaviour
             canDoubleJump = true;
         }
 
+        if (Input.GetKey(KeyCode.BackQuote))
+        {
+            SceneManager.LoadScene("Level" + (int.Parse(SceneManager.GetActiveScene().name.Substring(5)) + 1).ToString());
+        }
+
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             movingLeft = true;
         }
+
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             movingRight = true;
