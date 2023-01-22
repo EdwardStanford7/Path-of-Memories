@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -360,6 +361,12 @@ public class PlayerMovement : MonoBehaviour
             dashActive = true;
             canClimb = false;
             doubleJumpActive = false;
+        }
+
+        if (collision.gameObject.name.Equals("LoadNextLevel"))
+        {
+            // Maybe play some sort of animation here.
+            SceneManager.LoadScene("Level2");
         }
     }
 }
