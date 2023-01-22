@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
             clingJumpTime = clingJumpDuration;
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpBufferCounter = jumpBufferTime;
         }
