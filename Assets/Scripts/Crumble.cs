@@ -46,7 +46,7 @@ public class Crumble : MonoBehaviour
         if (collision.gameObject.name.Equals("GroundCheck"))
         {
             Collided = true;
-            collision.gameObject.transform.parent.GetComponent<PlayerMovement>().canDash = true;
+            collision.gameObject.transform.parent.GetComponent<PlayerMovement>().SetCanDash(true);
         }
     }
 

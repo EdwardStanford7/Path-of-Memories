@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     private bool dashInput = false;
     [SerializeField] private int dashSpeed = 50;
     private bool dashInputReleased = true;
-    public bool canDash = false;
+    private bool canDash = false;
 
     // Animation
     private Animator playerAnimator;
@@ -371,5 +371,10 @@ public class PlayerMovement : MonoBehaviour
             // Maybe play some sort of animation here.
             SceneManager.LoadScene("Level" + (int.Parse(SceneManager.GetActiveScene().name.Substring(5)) + 1).ToString());
         }
+    }
+
+    public void SetCanDash(bool canDash)
+    {
+        this.canDash = canDash;
     }
 }
