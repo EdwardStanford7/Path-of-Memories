@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Transactions;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,23 +21,30 @@ public class DialogueManager : MonoBehaviour
 
 
     private int textPromptIndex;
+    private int currPromptIndex;
     private bool isActive = false;
+    private bool isWritingText = false;
 
 
     public void Start()
     {
+        textPromptIndex = 0;
+        currPromptIndex = 0;
     }
 
     public void Update()
     {
-        if (textBox.activeSelf && !isActive)
+        if (textBox.activeSelf && !isActive && !isWritingText)
         {
+            new WaitForSeconds(0.8f);
             StartCoroutine(TypeGameDialogue());
             isActive = true;
         }
 
         if (Input.GetKey(KeyCode.Return) && isActive == true)
         {
+            currPromptIndex++;
+            gameText.text = "";
             textBox.SetActive(false);
             theText.SetActive(false);
             isActive = false;
@@ -50,32 +58,34 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator TypeGameDialogue()
     {
-        gameText.text = "";
+        isWritingText = true;
         foreach(char letter in playerDialogueSentences[textPromptIndex].ToCharArray())
         {
-            gameText.text += letter;
             if (currCollider != null)
             {
                 if (currCollider.gameObject.name.Contains("TextPrompt_" + textPromptIndex))
                 {
+                    gameText.text += letter;
                     yield return new WaitForSeconds(typingSpeed);
                 }
             }
         }
+        isWritingText = false;
         textPromptIndex++;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name.Contains("TextPrompt_" + textPromptIndex))
+        if (collision.gameObject.name.Contains("TextPrompt_" + currPromptIndex))
         {
+            currPromptIndex++;
             if (isActive && currCollider != null)
             {
-                new WaitForSeconds(0.7f);
-                    Destroy(currCollider);
-                    textBox.SetActive(false);
-                    theText.SetActive(false);
-                    isActive = false;
+                gameText.text = "";
+                Destroy(currCollider);
+                textBox.SetActive(false);
+                theText.SetActive(false);
+                isActive = false;
             }
             currCollider = collision;
             textBox.SetActive(true);
