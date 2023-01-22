@@ -10,7 +10,13 @@ public class PlayerMovement : MonoBehaviour
     // Regular movement variables.
     private Rigidbody2D rb;
 
+    [SerializeField] private float movementSpeed = 10f;
+
     public float gravityScale = 10f;
+    [SerializeField] private float jumpSpeed = 10f;
+
+    [SerializeField] private float airDecelerationFactor = 1.01f;
+    [SerializeField] private float groundDecelerationFactor = 1.01f;
 
     private bool isFacingRight = true;
 
@@ -19,28 +25,38 @@ public class PlayerMovement : MonoBehaviour
 
     // Climb movement variables.
     private bool climbing = false;
+    [SerializeField] private float climbingSpeed = 5;
     private bool movingUp = false;
     private bool movingDown = false;
-    private int duringJump = 0;
+    private int clingJumpTime = 0;
+    [SerializeField] private int clingJumpDuration = 10;
+    [SerializeField] private float clingJumpSpeed = 25f;
 
     // Jump movement variables.
     private bool grounded = false;
 
-    private float coyoteTime = .15f;
+    [SerializeField] private float coyoteTime = .15f;
     private float coyoteTimeCounter;
 
-    private float jumpBufferTime = .1f;
+    [SerializeField] private float jumpBufferTime = .1f;
     private float jumpBufferCounter;
     private bool jumping = false;
+    [SerializeField] private float jumpDecelerationFactor = 0.5f;
 
     private bool canDoubleJump = false;
     private bool doubleJumping = false;
+    [SerializeField] private float doubleJumpSpeed = 25f;
 
     // Dash movement variables.
     private int dashTime = 0;
+    [SerializeField] private int dashDuration = 10;
+    [SerializeField] private int dashStallTime = 5;
     private bool dashInput = false;
-    private int dashSpeed = 30;
+    [SerializeField] private int dashSpeed = 30;
     private bool dashInputReleased = true;
+
+    // Animation
+    private Animator playerAnimator;
 
     // Layer and collision check variables.
     [SerializeField] Transform groundCheck;
@@ -52,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
+        playerAnimator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -89,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && climbing)
         {
-            duringJump = 3;
+            clingJumpTime = clingJumpDuration;
         }
 
         if (Input.GetKey(KeyCode.Space))
@@ -103,6 +120,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0f)
         {
+            playerAnimator.SetTrigger("isJumping");
+
             jumping = true;
 
             coyoteTimeCounter = 0f;
@@ -161,11 +180,11 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!movingRight)
             {
-                rb.velocity = new Vector2(-10, rb.velocity.y);
+                rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
             }
             else if (!movingLeft)
             {
-                rb.velocity = new Vector2(10, rb.velocity.y);
+                rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
             }
             else
             {
@@ -176,23 +195,23 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!grounded)
             {
-                rb.velocity = new Vector2((float)(rb.velocity.x / 1.01), rb.velocity.y);
+                rb.velocity = new Vector2((float)(rb.velocity.x / airDecelerationFactor), rb.velocity.y);
             }
             else
             {
-                rb.velocity = new Vector2((float)(rb.velocity.x / 1.2), rb.velocity.y);
+                rb.velocity = new Vector2((float)(rb.velocity.x / groundDecelerationFactor), rb.velocity.y);
             }
         }
 
-        if (climbing && duringJump == 0)
+        if (climbing && clingJumpTime == 0)
         {
             if (movingUp)
             {
-                rb.velocity = new Vector2(0, 5f);
+                rb.velocity = new Vector2(0, climbingSpeed);
             }
             else if (movingDown)
             {
-                rb.velocity = new Vector2(0, -5f);
+                rb.velocity = new Vector2(0, -climbingSpeed);
             }
             else
             {
@@ -200,12 +219,12 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (duringJump > 0)
+        if (clingJumpTime > 0)
         {
-            duringJump--;
+            clingJumpTime--;
             if (TouchingWall())
             {
-                rb.velocity = new Vector2(rb.velocity.x, 25f);
+                rb.velocity = new Vector2(rb.velocity.x, clingJumpSpeed);
             }
         }
 
@@ -218,7 +237,7 @@ public class PlayerMovement : MonoBehaviour
             dashInputReleased = false;
         }
 
-        if (dashTime > 5)
+        if (dashTime > dashDuration - dashStallTime)
         {
             dashTime--;
             rb.velocity = new Vector2(rb.velocity.x, 0);
@@ -257,23 +276,26 @@ public class PlayerMovement : MonoBehaviour
 
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 15f);
+            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
 
             jumpBufferCounter = 0;
         }
 
         if (jumping)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpDecelerationFactor);
+            playerAnimator.SetTrigger("isJumping");
         }
 
         if (doubleJumping)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 25f);
+            rb.velocity = new Vector2(rb.velocity.x, doubleJumpSpeed);
+            playerAnimator.SetTrigger("isJumping");
             doubleJumping = false;
         }
 
         Flip();
+        playerAnimator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
     }
 
     public bool IsGrounded()
@@ -308,6 +330,6 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(-dashSpeed, 0);
         }
 
-        dashTime = 10;
+        dashTime = dashDuration;
     }
 }
