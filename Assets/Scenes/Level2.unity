@@ -587,21 +587,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4bb292d11f51d04891e3473aba1bce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
-  gravityScale: 3
-  jumpSpeed: 9
+  movementSpeed: 8
+  gravityScale: 5.5
+  jumpSpeed: 12
   airDecelerationFactor: 1.01
   groundDecelerationFactor: 1.5
   climbingSpeed: 5
   clingJumpDuration: 5
-  clingJumpSpeed: 10
+  clingJumpSpeed: 15
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   jumpDecelerationFactor: 0.5
-  doubleJumpSpeed: 16
+  doubleJumpSpeed: 15
   dashDuration: 15
   dashStallTime: 5
-  dashSpeed: 50
+  dashSpeed: 40
+  canDash: 0
   groundCheck: {fileID: 1409677475}
   wallCheckLeft: {fileID: 100991684}
   wallCheckRight: {fileID: 1264467684}

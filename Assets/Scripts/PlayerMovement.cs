@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     private bool dashInput = false;
     [SerializeField] private int dashSpeed = 50;
     private bool dashInputReleased = true;
-    private bool canDash = false;
+    public bool canDash = false;
 
     // Animation
     private Animator playerAnimator;
