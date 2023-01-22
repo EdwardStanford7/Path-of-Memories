@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
@@ -14,6 +15,8 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private GameObject textBox;
     [SerializeField] private GameObject theText;
+
+    Collider2D currCollider;
 
 
     private int textPromptIndex;
@@ -33,16 +36,22 @@ public class DialogueManager : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetKey(KeyCode.Return) && isActive == true)
         {
             textBox.SetActive(false);
             theText.SetActive(false);
             isActive = false;
+
+            if (currCollider != null)
+            {
+                Destroy(currCollider);
+            }
         }
     }
 
     private IEnumerator TypeGameDialogue()
     {
+        gameText.text = "";
         foreach(char letter in playerDialogueSentences[textPromptIndex].ToCharArray())
         {
             gameText.text += letter;
@@ -52,22 +61,12 @@ public class DialogueManager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Console.WriteLine(collision.gameObject.name);
-        if (collision.gameObject.name == "TextPrompt_1")
+        if (collision.gameObject.name.Contains("TextPrompt"))
         {
+            currCollider = collision;
             textBox.SetActive(true);
             theText.SetActive(true);
             textPromptIndex = 0;
-        }
-
-        if (collision.name == "TextPrompt_2")
-        {
-
-        }
-
-        if (collision.name == "TextPrompt_3")
-        {
-
         }
     }
 }
