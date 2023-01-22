@@ -45,6 +45,7 @@ public class DialogueManager : MonoBehaviour
             if (currCollider != null)
             {
                 Destroy(currCollider);
+                textPromptIndex++;
             }
         }
     }
@@ -61,12 +62,11 @@ public class DialogueManager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name.Contains("TextPrompt"))
+        if (collision.gameObject.name.Contains("TextPrompt_" + textPromptIndex))
         {
             currCollider = collision;
             textBox.SetActive(true);
             theText.SetActive(true);
-            textPromptIndex = 0;
         }
     }
 }
