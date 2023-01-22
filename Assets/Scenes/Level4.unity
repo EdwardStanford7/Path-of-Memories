@@ -616,7 +616,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526664330}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.6, y: -5.43, z: 0}
+  m_LocalPosition: {x: 6.07, y: -5.52, z: 0}
   m_LocalScale: {x: 0.125, y: 0.125, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -715,7 +715,7 @@ MonoBehaviour:
   m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 526664336}
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
@@ -1326,7 +1326,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124406548}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.435865, y: -5.409979, z: -10}
+  m_LocalPosition: {x: 6.234135, y: -5.499979, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11896,7 +11896,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2139001842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.02, y: -1.6599998, z: -0.030681968}
+  m_LocalPosition: {x: 102.1, y: -1.6599998, z: -0.030681968}
   m_LocalScale: {x: 3.03952, y: 3.0844798, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11944,11 +11944,11 @@ MonoBehaviour:
   typingSpeed: 0.05
   gameText: {fileID: 303050926}
   playerDialogueSentences:
-  - I, uh ... I remember?
-  - Dashing.
-  - Dashing from thing, place to place. Nothing felt right.
-  - But it made people around me unhappy.
-  - And so I ...
   - I ...
+  - ... my wife, she ...
+  - She's not here. Where is she?
+  - Where am I?
+  - Oh.
+  - That's right, I ..."
   textBox: {fileID: 757925282}
   theText: {fileID: 685832697}
