@@ -10,13 +10,13 @@ public class PlayerMovement : MonoBehaviour
     // Regular movement variables.
     private Rigidbody2D rb;
 
-    [SerializeField] private float movementSpeed = 10f;
+    [SerializeField] private float movementSpeed = 8f;
 
-    public float gravityScale = 10f;
-    [SerializeField] private float jumpSpeed = 10f;
+    public float gravityScale = 5.5f;
+    [SerializeField] private float jumpSpeed = 12f;
 
     [SerializeField] private float airDecelerationFactor = 1.01f;
-    [SerializeField] private float groundDecelerationFactor = 1.01f;
+    [SerializeField] private float groundDecelerationFactor = 1.5f;
 
     private bool isFacingRight = true;
 
@@ -29,8 +29,8 @@ public class PlayerMovement : MonoBehaviour
     private bool movingUp = false;
     private bool movingDown = false;
     private int clingJumpTime = 0;
-    [SerializeField] private int clingJumpDuration = 10;
-    [SerializeField] private float clingJumpSpeed = 25f;
+    [SerializeField] private int clingJumpDuration = 5;
+    [SerializeField] private float clingJumpSpeed = 15f;
 
     // Jump movement variables.
     private bool grounded = false;
@@ -45,14 +45,14 @@ public class PlayerMovement : MonoBehaviour
 
     private bool canDoubleJump = false;
     private bool doubleJumping = false;
-    [SerializeField] private float doubleJumpSpeed = 25f;
+    [SerializeField] private float doubleJumpSpeed = 15f;
 
     // Dash movement variables.
     private int dashTime = 0;
-    [SerializeField] private int dashDuration = 10;
+    [SerializeField] private int dashDuration = 15;
     [SerializeField] private int dashStallTime = 5;
     private bool dashInput = false;
-    [SerializeField] private int dashSpeed = 30;
+    [SerializeField] private int dashSpeed = 50;
     private bool dashInputReleased = true;
 
     // Animation

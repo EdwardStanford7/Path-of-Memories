@@ -9783,21 +9783,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4bb292d11f51d04891e3473aba1bce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
-  gravityScale: 10
-  jumpSpeed: 10
+  movementSpeed: 8
+  gravityScale: 5.5
+  jumpSpeed: 12
   airDecelerationFactor: 1.01
-  groundDecelerationFactor: 1.2
+  groundDecelerationFactor: 1.5
   climbingSpeed: 5
-  clingJumpDuration: 10
-  clingJumpSpeed: 25
+  clingJumpDuration: 5
+  clingJumpSpeed: 15
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   jumpDecelerationFactor: 0.5
-  doubleJumpSpeed: 25
-  dashDuration: 10
+  doubleJumpSpeed: 15
+  dashDuration: 15
   dashStallTime: 5
-  dashSpeed: 30
+  dashSpeed: 50
   groundCheck: {fileID: 7984627959241562793}
   wallCheckLeft: {fileID: 7984627959694305138}
   wallCheckRight: {fileID: 7984627960976240664}
