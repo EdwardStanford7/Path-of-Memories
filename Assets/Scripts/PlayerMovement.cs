@@ -77,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
     {
         movingLeft = false;
         movingRight = false;
-        dashInput = false;
         jumping = false;
 
         grounded = IsGrounded();
@@ -229,6 +228,10 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, clingJumpSpeed);
             }
         }
+
+        Debug.Log("dashInput " + dashInput);
+        Debug.Log("canDash " + canDash);
+        Debug.Log("dashInputReleased " + dashInputReleased);
 
         if (dashInput && canDash && dashInputReleased)
         {

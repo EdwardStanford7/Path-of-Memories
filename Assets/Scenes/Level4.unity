@@ -490,7 +490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   gravityScale: 3
-  jumpSpeed: 8
+  jumpSpeed: 9
   airDecelerationFactor: 1.01
   groundDecelerationFactor: 1.5
   climbingSpeed: 5
@@ -499,7 +499,7 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   jumpDecelerationFactor: 0.5
-  doubleJumpSpeed: 15
+  doubleJumpSpeed: 16
   dashDuration: 15
   dashStallTime: 5
   dashSpeed: 50
@@ -3097,7 +3097,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863245775}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -3108,7 +3108,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 7
 --- !u!19719996 &1863245780
 TilemapCollider2D:

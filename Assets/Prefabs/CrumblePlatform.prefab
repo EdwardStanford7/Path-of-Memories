@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7490342147872217046}
   - component: {fileID: 7490342147872217049}
   - component: {fileID: 6958428336242563118}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CrumblePlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}

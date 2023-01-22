@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7490342147872217046}
   - component: {fileID: 7490342147872217049}
   - component: {fileID: 2335245611725514868}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: InstantCrumblePlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,4 +125,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnTime: 1
-  killTime: 0.1
+  killTime: 0.2

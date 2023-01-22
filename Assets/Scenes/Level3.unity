@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6958428336242563118, guid: 9374dd1e5a2aeaa40bae8aa43fb07eae, type: 3}
+      propertyPath: killTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7490342147872217047, guid: 9374dd1e5a2aeaa40bae8aa43fb07eae, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -187,6 +191,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2335245611725514868, guid: a16f9189425135d4ab5c53d98c82cbd9, type: 3}
+      propertyPath: killTime
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7490342147872217047, guid: a16f9189425135d4ab5c53d98c82cbd9, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -512,7 +520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7490342147872217047, guid: 9374dd1e5a2aeaa40bae8aa43fb07eae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 77
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 7490342147872217047, guid: 9374dd1e5a2aeaa40bae8aa43fb07eae, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1417,7 +1425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   gravityScale: 3
-  jumpSpeed: 8
+  jumpSpeed: 9
   airDecelerationFactor: 1.01
   groundDecelerationFactor: 1.5
   climbingSpeed: 5
@@ -1426,7 +1434,7 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   jumpDecelerationFactor: 0.5
-  doubleJumpSpeed: 15
+  doubleJumpSpeed: 16
   dashDuration: 15
   dashStallTime: 5
   dashSpeed: 50
@@ -2971,7 +2979,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863245775}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -2982,7 +2990,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 7
 --- !u!19719996 &1863245780
 TilemapCollider2D:

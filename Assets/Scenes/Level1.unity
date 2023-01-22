@@ -11495,7 +11495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   gravityScale: 3
-  jumpSpeed: 8
+  jumpSpeed: 9
   airDecelerationFactor: 1.01
   groundDecelerationFactor: 1.5
   climbingSpeed: 5
@@ -11504,7 +11504,7 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   jumpDecelerationFactor: 0.5
-  doubleJumpSpeed: 15
+  doubleJumpSpeed: 16
   dashDuration: 15
   dashStallTime: 5
   dashSpeed: 50

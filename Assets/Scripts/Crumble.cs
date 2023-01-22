@@ -52,7 +52,7 @@ public class Crumble : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (frameCount >= killTime)
+        if (frameCount >= killTime * 50)
         {
             // Turn off collisions, visibility, and reports to "destroy" the platform.
             box.enabled = false;
