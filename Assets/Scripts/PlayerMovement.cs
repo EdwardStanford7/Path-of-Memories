@@ -332,4 +332,39 @@ public class PlayerMovement : MonoBehaviour
 
         dashTime = dashDuration;
     }
+
+    /// <summary>
+    // If ability has been triggered, set respective flags to true:
+    /// - canClimb: "Climb"
+    /// - doubleJumpActive: "Jump"
+    /// - canDash: "Dash"
+    /// </summary>
+    /// <param name="collision">collision box</param>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name.Equals("Climb"))
+        {
+            canClimb = true;
+            Debug.Log(canClimb);
+            doubleJumpActive = false;
+            canDash = false;
+            Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.name.Equals("Jump"))
+        {
+            doubleJumpActive = true;
+            canClimb = false;
+            canDash = false;
+            Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.name.Equals("Dash"))
+        {
+            canDash = true;
+            canClimb = false;
+            doubleJumpActive = false;
+            Destroy(collision.gameObject);
+        }
+
+    }
+
 }
