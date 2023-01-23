@@ -4,67 +4,61 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     // Ability activation booleans.
-    private bool canClimb = false; // Climb is holding down left control
-    private bool doubleJumpActive = false;
-    private bool dashActive = false;
+    [SerializeField] public bool canClimb = false; // Climb is holding down left control
+    [SerializeField] public bool doubleJumpActive = false;
+    [SerializeField] public bool dashActive = false;
 
-    // Regular movement variables.
-    private Rigidbody2D rb;
-
+    // Movement parameters.
     [SerializeField] private float movementSpeed = 8f;
-
-    public float gravityScale = 5.5f;
     [SerializeField] private float jumpSpeed = 12f;
-
+    [SerializeField] private float gravityScale = 5.5f;
     [SerializeField] private float airDecelerationFactor = 1.01f;
     [SerializeField] private float groundDecelerationFactor = 1.5f;
-
-    private bool isFacingRight = true;
-
-    private bool movingLeft = true;
-    private bool movingRight = true;
-
-    // Climb movement variables.
-    private bool climbing = false;
     [SerializeField] private float climbingSpeed = 5;
-    private bool movingUp = false;
-    private bool movingDown = false;
-    private int clingJumpTime = 0;
     [SerializeField] private int clingJumpDuration = 5;
     [SerializeField] private float clingJumpSpeed = 15f;
-
-    // Jump movement variables.
-    private bool grounded = false;
-
     [SerializeField] private float coyoteTime = .15f;
-    private float coyoteTimeCounter;
-
     [SerializeField] private float jumpBufferTime = .1f;
-    private float jumpBufferCounter;
-    private bool jumping = false;
     [SerializeField] private float jumpDecelerationFactor = 0.5f;
-
-    private bool canDoubleJump = false;
-    private bool doubleJumping = false;
-    [SerializeField] private float doubleJumpSpeed = 15f;
-
-    // Dash movement variables.
-    private int dashTime = 0;
     [SerializeField] private int dashDuration = 15;
     [SerializeField] private int dashStallTime = 5;
-    private bool dashInput = false;
     [SerializeField] private int dashSpeed = 50;
-    private bool dashInputReleased = true;
-    private bool canDash = false;
-
-    // Animation
-    private Animator playerAnimator;
+    [SerializeField] private float doubleJumpSpeed = 15f;
 
     // Layer and collision check variables.
     [SerializeField] Transform groundCheck;
     [SerializeField] Transform wallCheckLeft;
     [SerializeField] Transform wallCheckRight;
     [SerializeField] private LayerMask groundLayer;
+
+    // Regular movement variables.
+    private Rigidbody2D rb;
+    private bool isFacingRight = true;
+    private bool movingLeft = true;
+    private bool movingRight = true;
+
+    // Climb movement variables.
+    private bool climbing = false;
+    private bool movingUp = false;
+    private bool movingDown = false;
+    private int clingJumpTime = 0;
+
+    // Jump movement variables.
+    private bool grounded = false;
+    private float coyoteTimeCounter;
+    private float jumpBufferCounter;
+    private bool jumping = false;
+    private bool canDoubleJump = false;
+    private bool doubleJumping = false;
+
+    // Dash movement variables.
+    private int dashTime = 0;
+    private bool dashInput = false;
+    private bool dashInputReleased = true;
+    private bool canDash = false;
+
+    // Animation
+    private Animator playerAnimator;
 
     private void Start()
     {
@@ -235,10 +229,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        Debug.Log("dashInput " + dashInput);
-        Debug.Log("canDash " + canDash);
-        Debug.Log("dashInputReleased " + dashInputReleased);
-
         if (dashInput && canDash && dashInputReleased)
         {
             climbing = false;
@@ -344,42 +334,7 @@ public class PlayerMovement : MonoBehaviour
         dashTime = dashDuration;
     }
 
-    /// <summary>
-    // If ability has been triggered, set respective flags to true:
-    /// - canClimb: "Climb"
-    /// - doubleJumpActive: "Jump"
-    /// - canDash: "Dash"
-    /// </summary>
-    /// <param name="collision">collision box</param>
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.name.Equals("Climb"))
-        {
-            canClimb = true;
-            doubleJumpActive = false;
-            dashActive = false;
-            canDoubleJump = false;
-        }
-        if (collision.gameObject.name.Equals("Jump"))
-        {
-            doubleJumpActive = true;
-            canClimb = false;
-            dashActive = false;
-        }
-        if (collision.gameObject.name.Equals("Dash"))
-        {
-            dashActive = true;
-            canClimb = false;
-            doubleJumpActive = false;
-            canDoubleJump = false;
-        }
 
-        if (collision.gameObject.name.Equals("LoadNextLevel"))
-        {
-            // Maybe play some sort of animation here.
-            SceneManager.LoadScene("Level" + (int.Parse(SceneManager.GetActiveScene().name.Substring(5)) + 1).ToString());
-        }
-    }
 
     public void SetCanDash(bool canDash)
     {
