@@ -86,10 +86,16 @@ public class PlayerMovement : MonoBehaviour
             canDoubleJump = true;
         }
 
+        if (Input.GetKey(KeyCode.BackQuote))
+        {
+            SceneManager.LoadScene("Level" + (int.Parse(SceneManager.GetActiveScene().name.Substring(5)) + 1).ToString());
+        }
+
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             movingLeft = true;
         }
+
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             movingRight = true;
@@ -110,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
             clingJumpTime = clingJumpDuration;
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpBufferCounter = jumpBufferTime;
         }
@@ -128,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
             coyoteTimeCounter = 0f;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !IsGrounded() && canDoubleJump)
+        if (Input.GetKeyDown(KeyCode.Space) && !IsGrounded() && canDoubleJump && doubleJumpActive)
         {
             doubleJumping = true;
             canDoubleJump = false;
@@ -352,6 +358,7 @@ public class PlayerMovement : MonoBehaviour
             canClimb = true;
             doubleJumpActive = false;
             dashActive = false;
+            canDoubleJump = false;
         }
         if (collision.gameObject.name.Equals("Jump"))
         {
@@ -364,6 +371,7 @@ public class PlayerMovement : MonoBehaviour
             dashActive = true;
             canClimb = false;
             doubleJumpActive = false;
+            canDoubleJump = false;
         }
 
         if (collision.gameObject.name.Equals("LoadNextLevel"))
