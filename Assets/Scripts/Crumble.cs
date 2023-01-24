@@ -41,15 +41,6 @@ public class Crumble : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.name.Equals("GroundCheck"))
-        {
-            Collided = true;
-            collision.gameObject.transform.parent.GetComponent<PlayerMovement>().SetCanDash(true);
-        }
-    }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (frameCount >= killTime * 50)

@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
     // Ability activation booleans.
-    [SerializeField] public bool canClimb = false; // Climb is holding down left control
+    [SerializeField] public bool canClimb = false;
     [SerializeField] public bool doubleJumpActive = false;
     [SerializeField] public bool dashActive = false;
 
@@ -15,15 +14,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airDecelerationFactor = 1.01f;
     [SerializeField] private float groundDecelerationFactor = 1.5f;
     [SerializeField] private float climbingSpeed = 5;
-    [SerializeField] private int clingJumpDuration = 5;
     [SerializeField] private float clingJumpSpeed = 15f;
-    [SerializeField] private float coyoteTime = .15f;
     [SerializeField] private float jumpBufferTime = .1f;
-    [SerializeField] private float jumpDecelerationFactor = 0.5f;
-    [SerializeField] private int dashDuration = 15;
+    [SerializeField] private int numDashes = 1;
     [SerializeField] private int dashStallTime = 5;
     [SerializeField] private int dashSpeed = 50;
-    [SerializeField] private float doubleJumpSpeed = 15f;
 
     // Layer and collision check variables.
     [SerializeField] Transform groundCheck;
@@ -31,31 +26,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform wallCheckRight;
     [SerializeField] private LayerMask groundLayer;
 
-    // Regular movement variables.
     private Rigidbody2D rb;
     private bool isFacingRight = true;
-    private bool movingLeft = true;
-    private bool movingRight = true;
 
-    // Climb movement variables.
-    private bool climbing = false;
-    private bool movingUp = false;
-    private bool movingDown = false;
-    private int clingJumpTime = 0;
-
-    // Jump movement variables.
-    private bool grounded = false;
-    private float coyoteTimeCounter;
-    private float jumpBufferCounter;
-    private bool jumping = false;
-    private bool canDoubleJump = false;
-    private bool doubleJumping = false;
-
-    // Dash movement variables.
-    private int dashTime = 0;
+    // Player input checks.
+    private bool moveRightInput = false;
+    private bool moveLeftInput = false;
+    private bool moveUpInput = false;
+    private bool moveDownInput = false;
+    private bool jumpInput = false;
     private bool dashInput = false;
-    private bool dashInputReleased = true;
-    private bool canDash = false;
+
+    private int dashesLeft = 1;
+    private int jumpsLeft = 1;
+
+    private int jumping = 0;
+    private int dashing = 0;
+
+    private bool climbingLastFrame = false;
 
     // Animation
     private Animator playerAnimator;
@@ -63,240 +51,238 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = gravityScale;
         playerAnimator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        movingLeft = false;
-        movingRight = false;
-        jumping = false;
-
-        grounded = IsGrounded();
-
-        if (grounded && doubleJumpActive)
+        if ((TouchingWallRight() && canClimb) || dashing > 0)
         {
-            canDoubleJump = true;
-        }
-
-        if (Input.GetKey(KeyCode.BackQuote))
-        {
-            SceneManager.LoadScene("Level" + (int.Parse(SceneManager.GetActiveScene().name.Substring(5)) + 1).ToString());
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            movingLeft = true;
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            movingRight = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
-        {
-            dashInput = true;
-        }
-
-        if (!Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            dashInputReleased = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && climbing)
-        {
-            clingJumpTime = clingJumpDuration;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            jumpBufferCounter = jumpBufferTime;
+            rb.gravityScale = 0;
         }
         else
         {
-            jumpBufferCounter -= Time.deltaTime;
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0f)
-        {
-            playerAnimator.SetTrigger("isJumping");
-
-            jumping = true;
-
-            coyoteTimeCounter = 0f;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && !IsGrounded() && canDoubleJump && doubleJumpActive)
-        {
-            doubleJumping = true;
-            canDoubleJump = false;
-        }
-
-        if (Input.GetKey(KeyCode.LeftControl) && canClimb && TouchingWall())
-        {
-            climbing = true;
-            rb.gravityScale = 0;
-        }
-
-        if (!TouchingWall())
-        {
-            climbing = false;
             rb.gravityScale = gravityScale;
         }
-
-        if (Input.GetKeyUp(KeyCode.LeftControl))
+        if (IsGrounded() || TouchingWallRight())
         {
-            climbing = false;
-            movingUp = false;
-            movingDown = false;
-            rb.gravityScale = gravityScale;
+            dashesLeft = numDashes;
+
+            if (doubleJumpActive)
+            {
+                jumpsLeft = 2;
+            }
+            else
+            {
+                jumpsLeft = 1;
+            }
         }
 
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && climbing)
-        {
-            movingUp = true;
-        }
-
-        if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && climbing)
-        {
-            movingDown = true;
-        }
-
-        if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
-        {
-            movingUp = false;
-        }
-
-        if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S))
-        {
-            movingDown = false;
-        }
+        GetPlayerInputs();
     }
+
 
     private void FixedUpdate()
     {
-        if ((movingLeft || movingRight) && dashTime == 0)
+        if (TouchingWallRight() && canClimb)
         {
-            if (!movingRight)
-            {
-                rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-            }
-            else if (!movingLeft)
-            {
-                rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
-            }
-            else
-            {
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            }
-        }
-        else if (dashTime == 0)
-        {
-            if (!grounded)
-            {
-                rb.velocity = new Vector2((float)(rb.velocity.x / airDecelerationFactor), rb.velocity.y);
-            }
-            else
-            {
-                rb.velocity = new Vector2((float)(rb.velocity.x / groundDecelerationFactor), rb.velocity.y);
-            }
+            rb.velocity = Vector2.zero;
         }
 
-        if (climbing && clingJumpTime == 0)
+        if (dashInput && dashActive && dashesLeft > 0 && dashing == 0)
         {
-            if (movingUp)
-            {
-                rb.velocity = new Vector2(0, climbingSpeed);
-            }
-            else if (movingDown)
-            {
-                rb.velocity = new Vector2(0, -climbingSpeed);
-            }
-            else
-            {
-                rb.velocity = new Vector2(0, 0);
-            }
+            Dash();
         }
 
-        if (clingJumpTime > 0)
+        if (jumpInput && jumpsLeft > 0 && !dashInput)
         {
-            clingJumpTime--;
-            if (TouchingWall())
-            {
-                rb.velocity = new Vector2(rb.velocity.x, clingJumpSpeed);
-            }
+            Jump();
+            playerAnimator.SetTrigger("isJumping");
         }
 
-        if (dashInput && canDash && dashInputReleased)
+        if (jumping > 0)
         {
-            climbing = false;
-            canDash = false;
-            dashInput = false;
-            TriggerDash();
-            dashInputReleased = false;
-        }
-
-        if (dashTime > dashDuration - dashStallTime)
-        {
-            dashTime--;
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-
-            return;
-        }
-        else if (dashTime > 0)
-        {
-            dashTime--;
-            rb.velocity = new Vector2(rb.velocity.x / dashSpeed, 0);
-
-            return;
-        }
-
-        if (dashTime == 0)
-        {
-            if (grounded && dashActive)
-            {
-                canDash = true;
-            }
-
-            if (!climbing)
-            {
-                rb.gravityScale = gravityScale;
-            }
-        }
-
-        if (grounded)
-        {
-            coyoteTimeCounter = coyoteTime;
+            jumping--;
         }
         else
         {
-            coyoteTimeCounter -= Time.deltaTime;
+            jumpInput = false;
         }
 
-        if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
+        if (dashing > 0)
+        {
+            dashing--;
+        }
+        else
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+
+        if (TouchingWallRight() && canClimb && (moveDownInput || moveUpInput) && !jumpInput && !dashInput)
+        {
+            Climb();
+        }
+
+        if (!dashInput && dashing == 0)
+        {
+            Move();
+        }
+
+        // Make the sprite face the right way.
+        if (rb.velocity.x < -0.01f)
+        {
+            isFacingRight = false;
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        if (rb.velocity.x > 0.01f)
+        {
+            isFacingRight = true;
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+
+        // Update the animator.
+        playerAnimator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
+        // If the player dropped off of a wall without jumping remove their jump.
+        if (climbingLastFrame != TouchingWallRight())
+        {
+            if (doubleJumpActive)
+            {
+                jumpsLeft = 1;
+            }
+            else
+            {
+                jumpsLeft = 0;
+            }
+        }
+        climbingLastFrame = TouchingWallRight();
+    }
+
+    private void GetPlayerInputs()
+    {
+        moveLeftInput = false;
+        moveRightInput = false;
+        moveUpInput = false;
+        moveDownInput = false;
+
+        // Arrow key/WASD inputs.
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        {
+            moveLeftInput = true;
+        }
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        {
+            moveRightInput = true;
+        }
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+        {
+            moveUpInput = true;
+        }
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+        {
+            moveDownInput = true;
+        }
+
+        // Jump input.
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpInput = true;
+        }
+
+        // Dash input.
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashActive)
+        {
+            dashInput = true;
+        }
+    }
+
+    private void Move()
+    {
+        if (moveRightInput && !moveLeftInput)
+        {
+            rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
+        }
+        else if (moveLeftInput && !moveRightInput)
+        {
+            rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
+        }
+        else if (moveRightInput && moveLeftInput)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+        else
+        {
+            if (IsGrounded())
+            {
+                rb.velocity = new Vector2((float)(rb.velocity.x / groundDecelerationFactor), rb.velocity.y);
+            }
+            else
+            {
+                rb.velocity = new Vector2((float)(rb.velocity.x / airDecelerationFactor), rb.velocity.y);
+            }
+        }
+    }
+
+    private void Jump()
+    {
+        if (TouchingWallRight())
+        {
+            rb.velocity = new Vector2(rb.velocity.x, clingJumpSpeed);
+        }
+        else
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-
-            jumpBufferCounter = 0;
         }
 
-        if (jumping)
+        jumping = (int)(jumpBufferTime * 50);
+        jumpInput = false;
+        jumpsLeft--;
+    }
+
+    private void Climb()
+    {
+        if (moveUpInput && !moveDownInput)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpDecelerationFactor);
-            playerAnimator.SetTrigger("isJumping");
+            rb.velocity = new Vector2(0, climbingSpeed);
         }
-
-        if (doubleJumping)
+        else if (moveDownInput && !moveUpInput)
         {
-            rb.velocity = new Vector2(rb.velocity.x, doubleJumpSpeed);
-            playerAnimator.SetTrigger("isJumping");
-            doubleJumping = false;
+            rb.velocity = new Vector2(0, -climbingSpeed);
+        }
+        else
+        {
+            rb.velocity = new Vector2(0, 0);
+        }
+    }
+
+    private void Dash()
+    {
+        if (isFacingRight)
+        {
+            if (TouchingWallRight() && !IsGrounded())
+            {
+                rb.velocity = new Vector2(-dashSpeed, 0);
+            }
+            else
+            {
+                rb.velocity = new Vector2(dashSpeed, 0);
+            }
+        }
+        else
+        {
+            if (TouchingWallRight() && !IsGrounded())
+            {
+                rb.velocity = new Vector2(dashSpeed, 0);
+            }
+            else
+            {
+                rb.velocity = new Vector2(-dashSpeed, 0);
+            }
         }
 
-        Flip();
-        playerAnimator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+        dashing = dashStallTime;
+        dashInput = false;
+        dashesLeft--;
     }
 
     public bool IsGrounded()
@@ -304,40 +290,8 @@ public class PlayerMovement : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.02f, groundLayer);
     }
 
-    public bool TouchingWall()
+    public bool TouchingWallRight()
     {
-        return Physics2D.OverlapCircle(wallCheckLeft.position, 0.2f, groundLayer) || Physics2D.OverlapCircle(wallCheckRight.position, 0.2f, groundLayer);
-    }
-
-    private void Flip()
-    {
-        if ((isFacingRight && rb.velocity.x < -.1f) || (!isFacingRight && rb.velocity.x > .1f) || (isFacingRight && movingLeft && !movingRight) || (!isFacingRight && movingRight && !movingLeft))
-        {
-            isFacingRight = !isFacingRight;
-            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        }
-    }
-
-    private void TriggerDash()
-    {
-        rb.gravityScale = 0f;
-
-        if (isFacingRight)
-        {
-            rb.velocity = new Vector2(dashSpeed, 0);
-        }
-        else
-        {
-            rb.velocity = new Vector2(-dashSpeed, 0);
-        }
-
-        dashTime = dashDuration;
-    }
-
-
-
-    public void SetCanDash(bool canDash)
-    {
-        this.canDash = canDash;
+        return Physics2D.OverlapCircle(wallCheckRight.position, 0.2f, groundLayer);
     }
 }

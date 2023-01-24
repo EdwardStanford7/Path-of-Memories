@@ -154,7 +154,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6139772309453308836}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.47, y: -0.05, z: 0.079353966}
+  m_LocalPosition: {x: -0.3617508, y: -0.05, z: 0.079353966}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -323,15 +323,12 @@ MonoBehaviour:
   airDecelerationFactor: 1.01
   groundDecelerationFactor: 1.5
   climbingSpeed: 5
-  clingJumpDuration: 5
   clingJumpSpeed: 15
   coyoteTime: 0.15
   jumpBufferTime: 0.1
-  jumpDecelerationFactor: 0.5
-  dashDuration: 15
+  numDashes: 1
   dashStallTime: 5
   dashSpeed: 50
-  doubleJumpSpeed: 15
   groundCheck: {fileID: 6139772308966571646}
   wallCheckLeft: {fileID: 6139772309453308837}
   wallCheckRight: {fileID: 6139772310718403791}
@@ -490,7 +487,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6139772310718403790}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.99, y: -0.05, z: 0.079353966}
+  m_LocalPosition: {x: 1.9180121, y: -0.05, z: 0.079353966}
   m_LocalScale: {x: 1, y: 0.67195785, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

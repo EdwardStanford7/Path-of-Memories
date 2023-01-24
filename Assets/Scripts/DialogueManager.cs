@@ -1,9 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Transactions;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
@@ -59,7 +55,7 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator TypeGameDialogue()
     {
         isWritingText = true;
-        foreach(char letter in playerDialogueSentences[textPromptIndex].ToCharArray())
+        foreach (char letter in playerDialogueSentences[textPromptIndex].ToCharArray())
         {
             if (currCollider != null)
             {
