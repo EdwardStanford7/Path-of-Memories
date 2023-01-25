@@ -41,6 +41,11 @@ public class Crumble : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Collided = true;
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (frameCount >= killTime * 50)
