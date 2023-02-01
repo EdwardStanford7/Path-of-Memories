@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = gravityScale;
         }
-        if (IsGrounded() || TouchingWallRight())
+        if (IsGrounded() || (TouchingWallRight() && canClimb))
         {
             dashesLeft = numDashes;
 
