@@ -10,7 +10,9 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private string[] playerDialogueSentences;
 
+    // The box graphic
     [SerializeField] private GameObject textBox;
+    // The words that appear
     [SerializeField] private GameObject theText;
 
     Collider2D currCollider;
@@ -32,6 +34,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (textBox.activeSelf && !isActive && !isWritingText)
         {
+            Debug.Log("isActive = true");
             new WaitForSeconds(0.8f);
             StartCoroutine(TypeGameDialogue());
             isActive = true;
@@ -39,7 +42,7 @@ public class DialogueManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return) && isActive == true)
         {
-            currPromptIndex++;
+            Debug.Log("set box active = false");
             gameText.text = "";
             textBox.SetActive(false);
             theText.SetActive(false);
@@ -74,15 +77,22 @@ public class DialogueManager : MonoBehaviour
     {
         if (collision.gameObject.name.Contains("TextPrompt_" + currPromptIndex))
         {
+            Debug.Log("collided " + currPromptIndex);
             currPromptIndex++;
             if (isActive && currCollider != null)
             {
+                Debug.Log("destroy collider, clear text");
+
+                // Clear text from the text box and remove collider
                 gameText.text = "";
                 Destroy(currCollider);
                 textBox.SetActive(false);
                 theText.SetActive(false);
                 isActive = false;
             }
+            
+            Debug.Log("set box active = true");
+            // Make text and box visible
             currCollider = collision;
             textBox.SetActive(true);
             theText.SetActive(true);

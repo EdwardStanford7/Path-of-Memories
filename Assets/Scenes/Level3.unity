@@ -1414,6 +1414,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6130431354451079896, guid: 12547d6d94c075644b541835519701e5, type: 3}
+      propertyPath: textBox
+      value: 
+      objectReference: {fileID: 1017026167}
+    - target: {fileID: 6130431354451079896, guid: 12547d6d94c075644b541835519701e5, type: 3}
+      propertyPath: theText
+      value: 
+      objectReference: {fileID: 2010155729}
+    - target: {fileID: 6130431354451079896, guid: 12547d6d94c075644b541835519701e5, type: 3}
+      propertyPath: gameText
+      value: 
+      objectReference: {fileID: 1772550333}
     - target: {fileID: 6139772310404790370, guid: 12547d6d94c075644b541835519701e5, type: 3}
       propertyPath: m_Name
       value: Player
