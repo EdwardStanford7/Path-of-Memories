@@ -37,7 +37,7 @@ public class DialogueManager : MonoBehaviour
             isActive = true;
         }
 
-        if (Input.GetKey(KeyCode.Return) && isActive == true)
+        if (Input.GetKeyDown(KeyCode.Return) && isActive == true)
         {
             currPromptIndex++;
             gameText.text = "";
